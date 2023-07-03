@@ -8,3 +8,7 @@ provider "helm" {
     config_context = "kind-cluster-workshop"
   }
 }
+
+provider "docker" {
+  host = "unix:///var/run/docker.sock"
+}
