@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
     export VAULT_TOKEN=$(jq -r ".root_token" cluster-keys.json)
   '';
 
-  name = "k8s-metallb-ingress";
+  name = "k8s-terraform";
   buildInputs =
     [ k9s kind terraform kubectl cilium-cli vault kubernetes-helm-wrapped ];
 }
