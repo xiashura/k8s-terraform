@@ -1,6 +1,7 @@
 provider "kind" {
-  # Configuration options
+  kubeconfig = "${path.root}/config.yml"
 }
+
 
 provider "helm" {
   kubernetes {
