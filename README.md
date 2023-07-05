@@ -1,5 +1,6 @@
 ### stack:
   * CNI: cilium
+  * Load Balancer: metallb
   * Service Mash: istio
   * CD: argo-cd
   * Secret engine: vault hcl
@@ -11,10 +12,6 @@
 ### Download providers 
 ```bash
 terraform init
-```
-### First need init cluster 
-```bash
-terraform apply -target=kind_cluster.workshop
 ```
 ### Apply all resources 
 ```bash 
