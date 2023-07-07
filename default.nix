@@ -9,6 +9,14 @@ in stdenv.mkDerivation {
   '';
 
   name = "k8s-terraform";
-  buildInputs =
-    [ k9s kind terraform kubectl cilium-cli vault kubernetes-helm-wrapped ];
+  buildInputs = [
+    k9s
+    kind
+    terraform
+    istioctl
+    kubectl
+    cilium-cli
+    vault
+    kubernetes-helm-wrapped
+  ];
 }
