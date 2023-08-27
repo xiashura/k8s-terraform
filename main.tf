@@ -8,7 +8,7 @@ resource "docker_network" "kind" {
 resource "kind_cluster" "workshop" {
   depends_on = [docker_network.kind]
   name       = "cluster-workshop"
-  config     = file("${path.root}/clusters/kind.yml")
+  config     = file("${path.root}/clusters/${var.kind-cluster}")
 }
 
 resource "helm_release" "cni" {
