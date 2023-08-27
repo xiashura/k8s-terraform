@@ -38,7 +38,7 @@ resource "helm_release" "mettallb" {
 
   provisioner "local-exec" {
     working_dir = path.root
-    command     = "kubectl -n metallb-system apply -f resources/mettallb.yml"
+    command     = " kubectl -n metallb-system apply -f resources/mettallb.yml"
   }
   depends_on = [helm_release.cni]
 }
@@ -59,33 +59,6 @@ resource "helm_release" "istio" {
 }
 
 
-resource "helm_release" "kiali" {
-  name          = "kiali"
-  repository    = "https://kiali.org/helm-charts"
-  chart         = "kiali-server"
-  namespace     = "istio-system"
-  wait          = true
-  wait_for_jobs = true
-  depends_on    = [helm_release.istio]
-  values = [templatefile("${path.root}/charts/kaili.yml", {
-    auth = {
-      strategy = "anonymous"
-    }
-  })]
-}
-
-resource "helm_release" "promethus" {
-  name             = "promethus"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "prometheus"
-  create_namespace = true
-  wait             = true
-  wait_for_jobs    = true
-  namespace        = "prometheus"
-  depends_on       = [helm_release.kiali]
-}
-
-
 resource "helm_release" "istiod" {
 
   name             = "istiod"
@@ -95,7 +68,10 @@ resource "helm_release" "istiod" {
   wait             = true
   wait_for_jobs    = true
   namespace        = "istio-system"
-  depends_on       = [helm_release.istio]
+  # values = [
+  #   templatefile("", "")
+  # ]
+  depends_on = [helm_release.istio]
 }
 
 resource "helm_release" "istio_ingress" {
@@ -107,7 +83,10 @@ resource "helm_release" "istio_ingress" {
   wait             = true
   wait_for_jobs    = true
   namespace        = "istio-ingress"
-  depends_on       = [helm_release.istio]
+  # values = [
+  #   templatefile("", "")
+  # ]
+  depends_on = [helm_release.istio]
 }
 
 
