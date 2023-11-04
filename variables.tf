@@ -19,3 +19,9 @@ variable "kind-cluster" {
   type        = string
   default     = "kind-multiple-master-nodes.yml"
 }
+
+
+variable "istio" {
+  type    = bool
+  default = false
+}

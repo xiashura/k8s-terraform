@@ -45,6 +45,8 @@ resource "helm_release" "mettallb" {
 
 resource "helm_release" "istio" {
 
+  count = var.istio == true ? 1 : 0
+
   name             = "istio"
   repository       = "https://istio-release.storage.googleapis.com/charts"
   chart            = "base"
@@ -61,6 +63,8 @@ resource "helm_release" "istio" {
 
 resource "helm_release" "istiod" {
 
+  count = var.istio == true ? 1 : 0
+
   name             = "istiod"
   repository       = "https://istio-release.storage.googleapis.com/charts"
   chart            = "istiod"
@@ -75,6 +79,8 @@ resource "helm_release" "istiod" {
 }
 
 resource "helm_release" "istio_ingress" {
+
+  count = var.istio == true ? 1 : 0
 
   name             = "istio-ingress"
   repository       = "https://istio-release.storage.googleapis.com/charts"
