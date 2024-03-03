@@ -3,6 +3,12 @@ resource "docker_network" "kind" {
   ipam_config {
     subnet = var.kind-network-subnet
   }
+
+  lifecycle {
+    ignore_changes = [
+      ipam_config,
+    ]
+  }
 }
 
 resource "kind_cluster" "workshop" {
@@ -42,6 +48,23 @@ resource "helm_release" "mettallb" {
   }
   depends_on = [helm_release.cni]
 }
+
+resource "helm_release" "metrics-server" {
+  name       = "metrics-server"
+  chart      = "metrics-server"
+  namespace  = "kube-system"
+  repository = "https://kubernetes-sigs.github.io/metrics-server"
+
+  set {
+    name  = "args"
+    value = "{--kubelet-insecure-tls}"
+  }
+
+  depends_on = [
+    helm_release.cni
+  ]
+}
+
 
 resource "helm_release" "istio" {
 
