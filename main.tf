@@ -118,4 +118,53 @@ resource "helm_release" "istio_ingress" {
   depends_on = [helm_release.istio]
 }
 
+resource "helm_release" "ingress-nginx" {
+
+	depends_on = [ helm_release.mettallb ]
+
+  count = var.ingress-nginx == true ? 1 : 0
+
+  name             = "ingress-nginx"
+  chart            = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+}
+
+resource "helm_release" "argocd" {
+  count = var.argocd == true ? 1 : 0
+
+  depends_on = [
+    helm_release.ingress-nginx,
+  ]
+
+  name             = "argocd"
+  chart            = "argo-cd"
+  repository       = "oci://ghcr.io/argoproj/argo-helm"
+  namespace        = "argocd"
+  create_namespace = true
+
+  values = [
+    templatefile("${path.root}/charts/argocd/value.yml", {})
+  ]
+}
+
+resource "helm_release" "vault" {
+  depends_on = [
+    helm_release.ingress-nginx,
+  ]
+
+  count            = var.vault == true ? 1 : 0
+  name             = "vault"
+  chart            = "vault"
+  repository       = "https://helm.releases.hashicorp.com"
+  namespace        = "vault"
+  create_namespace = true
+
+  values = [
+    templatefile("${path.root}/charts/vault.yml", {})
+  ]
+}
+
+
 
